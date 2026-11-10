@@ -1,0 +1,27 @@
+# Infraestructura: Keycloak (+ PostgreSQL propio) y, opcionalmente, Oracle.
+#   docker compose up -d                      -> Keycloak en http://localhost:8081
+#   docker compose --profile oracle up -d     -> ademas Oracle Free en localhost:1521
+services:
+  keycloak-db:
+    image: postgres:16
+    environment: { POSTGRES_DB: importastock_keycloak, POSTGRES_USER: keycloak, POSTGRES_PASSWORD: keycloak }
+    volumes: [kc_db:/var/lib/postgresql/data]
+  keycloak:
+    image: quay.io/keycloak/keycloak:25.0.6
+    command: start-dev --import-realm
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://keycloak-db:5432/importastock_keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: keycloak
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports: ["8081:8080"]
+    volumes: ["./keycloak/importastock-realm.json:/opt/keycloak/data/import/importastock-realm.json:ro"]
+    depends_on: [keycloak-db]
+  oracle:
+    image: gvenzl/oracle-free:23-slim
+    profiles: [oracle]
+    environment: { ORACLE_PASSWORD: oracle, APP_USER: importastock, APP_USER_PASSWORD: importastock }
+    ports: ["1521:1521"]
+volumes: { kc_db: {} }

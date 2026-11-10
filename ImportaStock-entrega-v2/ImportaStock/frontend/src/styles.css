@@ -1,0 +1,22 @@
+*{box-sizing:border-box}body{margin:0;font:14px/1.4 system-ui,Segoe UI,sans-serif;background:#f3f5f8;color:#1b2430}
+.top{position:fixed;top:0;left:0;right:0;height:52px;background:#12355b;color:#fff;display:flex;align-items:center;gap:12px;padding:0 16px;z-index:5}
+.top .sp{flex:1}.burger{display:none}.top button{background:#1f5ea8;color:#fff;border:0;padding:6px 12px;border-radius:6px;cursor:pointer}
+.body{display:flex;padding-top:52px;min-height:100vh}
+.side{width:210px;background:#fff;border-right:1px solid #dde3ea;padding:12px 0;position:fixed;top:52px;bottom:0}
+.side a{display:block;padding:10px 20px;color:#1b2430;text-decoration:none}.side a:hover{background:#eef3fa}.side a.act{background:#dbe8f9;font-weight:600;border-left:4px solid #1f5ea8}
+main{margin-left:210px;padding:20px;flex:1;min-width:0}
+h2{margin:0 0 14px}h3{margin:18px 0 8px}
+.card{background:#fff;border:1px solid #dde3ea;border-radius:8px;padding:14px;margin-bottom:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;align-items:end}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:16px}
+.kpi{background:#fff;border:1px solid #dde3ea;border-radius:8px;padding:14px}.kpi b{display:block;font-size:26px;color:#12355b}
+input,select,textarea{width:100%;padding:7px 9px;border:1px solid #c5cfdb;border-radius:6px;font:inherit}
+button{padding:7px 14px;border:0;border-radius:6px;background:#1f5ea8;color:#fff;cursor:pointer;font:inherit}
+button.sec{background:#e3e9f1;color:#1b2430}button.del{background:#c0392b}button:disabled{opacity:.5;cursor:not-allowed}
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid #dde3ea}
+th,td{padding:8px 10px;border-bottom:1px solid #e8edf3;text-align:left}th{background:#eef3fa}
+.tscroll{overflow-x:auto}.empty{padding:16px;color:#6b7785;text-align:center}.r{text-align:right}
+.badge{padding:2px 8px;border-radius:10px;font-size:12px;background:#e3e9f1}
+.b-REGISTRADA,.b-ENTRADA,.b-ok{background:#d9efe0;color:#1e6b3a}.b-PARCIAL{background:#fdf0cf;color:#8a6200}.b-COMPLETA{background:#d6e6fb;color:#1a4f94}.b-SALIDA,.b-bajo{background:#f8d9d5;color:#a1281b}
+.toast{position:fixed;right:16px;bottom:16px;padding:12px 18px;border-radius:8px;background:#1e6b3a;color:#fff;z-index:9;max-width:380px}.toast.err{background:#a1281b}
+@media(max-width:800px){.burger{display:block}.side{transform:translateX(-100%);transition:.2s;z-index:4}.side.open{transform:none}main{margin-left:0}}

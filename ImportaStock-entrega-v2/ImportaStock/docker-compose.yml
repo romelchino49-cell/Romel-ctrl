@@ -1,0 +1,60 @@
+# ImportaStock completo: docker compose up -d --build
+#   SPA http://localhost:4200 · Keycloak http://localhost:8081 · API directa http://localhost:${BACKEND_PORT:-8082}
+# Con Oracle: poner BACKEND_PROFILE=oracle en .env y ejecutar: docker compose --profile oracle up -d --build
+name: importastock
+services:
+  keycloak-db:
+    image: postgres:16
+    restart: unless-stopped
+    environment: { POSTGRES_DB: importastock_keycloak, POSTGRES_USER: keycloak, POSTGRES_PASSWORD: keycloak }
+    volumes: [kc_db:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U keycloak -d importastock_keycloak"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:25.0.6
+    restart: unless-stopped
+    command: start-dev --import-realm
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://keycloak-db:5432/importastock_keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: keycloak
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports: ["8081:8080"]
+    volumes: ["./deployment/keycloak/importastock-realm.json:/opt/keycloak/data/import/importastock-realm.json:ro"]
+    depends_on:
+      keycloak-db: { condition: service_healthy }
+
+  oracle:
+    image: gvenzl/oracle-free:23-slim
+    profiles: [oracle]
+    environment: { ORACLE_PASSWORD: oracle, APP_USER: importastock, APP_USER_PASSWORD: importastock }
+    ports: ["1522:1521"]
+
+  backend:
+    build: ./backend
+    restart: unless-stopped   # reintenta si Oracle/Keycloak aún no están listos
+    environment:
+      SPRING_PROFILES_ACTIVE: ${BACKEND_PROFILE:-dev}
+      # El token lo emite Keycloak vía localhost:8081 (navegador); las claves se leen por la red interna.
+      KEYCLOAK_ISSUER: http://localhost:8081/realms/importastock
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: http://keycloak:8080/realms/importastock/protocol/openid-connect/certs
+      ORACLE_URL: jdbc:oracle:thin:@//oracle:1521/FREEPDB1
+      ORACLE_USER: importastock
+      ORACLE_PASSWORD: importastock
+    ports: ["${BACKEND_PORT:-8082}:8080"]
+    depends_on: [keycloak]
+
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    ports: ["4200:80"]
+    depends_on: [backend]
+
+volumes:
+  kc_db: {}

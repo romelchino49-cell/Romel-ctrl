@@ -1,0 +1,9 @@
+site_name: ImportaStock — LP2 Unidad 2
+nav:
+  - Demo (lp2-demo): lp2-demo.md
+  - Arquitectura: arquitectura.md
+  - Seguridad con Keycloak: seguridad-keycloak.md
+  - Matriz de roles: matriz-roles.md
+  - Endpoints: endpoints.md
+  - Pruebas: pruebas.md
+  - Cumplimiento de la rúbrica: cumplimiento.md

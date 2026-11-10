@@ -1,0 +1,95 @@
+{
+  "realm": "importastock",
+  "enabled": true,
+  "sslRequired": "none",
+  "accessTokenLifespan": 300,
+  "roles": {
+    "realm": [
+      {
+        "name": "ADMIN"
+      },
+      {
+        "name": "OPERADOR"
+      },
+      {
+        "name": "SUPERVISOR"
+      }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "importastock-spa",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "redirectUris": [
+        "http://localhost:4200/*"
+      ],
+      "webOrigins": [
+        "http://localhost:4200"
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "http://localhost:4200/*"
+      }
+    }
+  ],
+  "users": [
+    {
+      "username": "admin1",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Ana",
+      "lastName": "Administradora",
+      "email": "admin1@demo.test",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "Admin123!",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "ADMIN"
+      ]
+    },
+    {
+      "username": "operador1",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Omar",
+      "lastName": "Operador",
+      "email": "operador1@demo.test",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "Operador123!",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "OPERADOR"
+      ]
+    },
+    {
+      "username": "supervisor1",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Sofía",
+      "lastName": "Supervisora",
+      "email": "supervisor1@demo.test",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "Supervisor123!",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "SUPERVISOR"
+      ]
+    }
+  ]
+}
